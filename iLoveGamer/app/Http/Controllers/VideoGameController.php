@@ -45,4 +45,14 @@ class VideoGameController extends Controller
 
         return Redirect::back();
     }
+
+    public function getFavorite()
+    {
+        $user = Auth::user();
+        $videoGames = $user->videoGames()->get();
+
+        return view("favorite", [
+            "videoGames" => $videoGames
+        ]);
+    }
 }
