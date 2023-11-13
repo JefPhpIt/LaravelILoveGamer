@@ -17,6 +17,18 @@ return new class extends Migration
             $table->string('imgUrl');
             $table->timestamps();
         });
+
+        Schema::create('video_games_users', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBiginteger('video_games_id')->unsigned();
+            $table->unsignedBiginteger('users_id')->unsigned();
+
+            $table->foreign('video_games_id')->references('id')
+                ->on('video_games')->onDelete('cascade');
+            $table->foreign('users_id')->references('id')
+                ->on('users')->onDelete('cascade');
+            $table->timestamps();
+        });
     }
 
     /**
