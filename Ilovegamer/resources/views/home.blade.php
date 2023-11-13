@@ -5,13 +5,14 @@
         </h2>
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
-                    {{ __("TODO Liste des jeux") }}
+    <div class="row row-cols-auto">
+        @foreach ($data->results as $game)
+            <div class="card col" style="width: 18rem;">
+                    <img src={{ $game->background_image }} class="card-img-top" alt={{ $game->name }}>
+                <div class="card-body">
+                    <h2 class="card-title">{{ $game->name }}</h2>
                 </div>
             </div>
-        </div>
+        @endforeach
     </div>
 </x-app-layout>

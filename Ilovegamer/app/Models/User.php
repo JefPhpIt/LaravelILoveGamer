@@ -42,4 +42,14 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function getVideoGames(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(
+            VideoGame::class,
+            'user__video_games',
+            'users_id',
+            'video_games_id'
+        );
+    }
 }
