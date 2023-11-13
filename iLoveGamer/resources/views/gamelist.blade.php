@@ -36,7 +36,7 @@
                             <img src="{{$game->background_image}}" class="card-img-top" alt="image">
                             <div class="card-body">
                               <h5 class="card-title">{{$game->name}}</h5>
-                              <a href="/favorite?gameId={{$game->id}}" class="btn btn-primary">TODO</a>
+                              <a href="/favorite?gameId={{$game->id}}" class="btn btn-primary">Add Favorite</a>
                             </div>
                         </div>                    
                     @endforeach
