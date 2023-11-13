@@ -4,7 +4,13 @@
             {{ __('Home') }}
         </h2>
     </x-slot>
-
+    <div class="container">
+        <form action={{ route('games') }} method="get">
+            @csrf
+            <x-text-input type="text" name="search" placeholder="search..."/>
+            <x-primary-button>{{ __('Rechercher') }}</x-primary-button>
+        </form>
+    </div>
     <div class="row row-cols-auto">
         @foreach ($data->results as $game)
             <div class="card col" style="width: 18rem;">

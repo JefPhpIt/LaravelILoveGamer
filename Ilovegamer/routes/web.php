@@ -22,6 +22,7 @@ Route::get('/', function () {
 */
 
 Route::get('/', [HomeController::class, 'home'])->name('home');
+Route::get('/games', [HomeController::class, 'search'])->name('games');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
