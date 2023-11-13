@@ -77,36 +77,46 @@ class GameController extends Controller
      */ 
     public function addGame($id, Request $request)    
     {               
-        // Interroger l'API de rawg.io   
-        $apiKey     = env('API_RAWGIO_KEY');              
-        $response   = Http::get("https://api.rawg.io/api/games/$id?key=$apiKey");       
+        //Teste si la gamme est déjà en base
+        $result     = DB::table('games')->where('idrawgapi', $id)->distinct()->get();
+        $isExist    = count($result);
 
-        $results    = $response->object();        
-        
-        //Insert dans la table games
-        $game=new Game();
+        //Si pas en base
+        if( $isExist == 0 ){
+            // Interroger l'API de rawg.io   
+            $apiKey     = env('API_RAWGIO_KEY');              
+            $response   = Http::get("https://api.rawg.io/api/games/$id?key=$apiKey");       
 
-        $game->name         = $results->name; 
-        $game->image_path   = $results->background_image;
-        $game->description  = $results->description;
-        $game->idrawgapi    = $results->id;
-        $game->save();
+            $results    = $response->object();        
+            
+            //Insert dans la table games
+            $game=new Game();
 
+            $game->name         = $results->name; 
+            $game->image_path   = $results->background_image;
+            $game->description  = $results->description;
+            $game->idrawgapi    = $results->id;
+            $game->save();
 
-       /* $insert = DB::table('game')->insertGetId([
-            'name'          => $results->name,
-            'image_path'    => $results->background_image,
-            'description'   => $results->description,
-            'idrawgapi'     => $results->id,
-        ]);*/
+            /* 
+            $insert = DB::table('game')->insertGetId([
+                'name'          => $results->name,
+                'image_path'    => $results->background_image,
+                'description'   => $results->description,
+                'idrawgapi'     => $results->id,
+            ]);
+            dd($insert); // nous retourne : 4
+            */           
 
-       // dd($insert); // nous retourne : 4
+            //Insert dans la table user_games
+            $userGame = new UserGame();
+            $userGame->user_id  = auth()->user()->id; // Supposons que l'utilisateur actuel est connecté
+            $userGame->game_id  = $game->id;
+            $userGame->save();       
 
-        //Insert dans la table user_games
-        $userGame = new UserGame();
-        $userGame->user_id  = auth()->user()->id; // Supposons que l'utilisateur actuel est connecté
-        $userGame->game_id  = $game->id;
-        $userGame->save();       
+        }else{
+            echo "Game déjà enregistré en base !";
+        }        
         
         //On redirige l'utilisateur sur la liste des favorites
         return redirect()->action([GameController::class, 'myGameFavorite']);
