@@ -20,14 +20,27 @@ class VideoGameController extends Controller
         $id = $request->get("gameId");
         $response = Http::get("https://api.rawg.io/api/games/" . $id ."?key=" . "320936eb892d49cea0ef502ce752b61a");
         //dd($response->object());
-
-        $videoGame = VideoGame::create([
-            'name' => $response->object()->name,
-            'imgUrl' => $response->object()->background_image
-        ]);
+        $videoGame = VideoGame::where('name',$response->object()->name)->first();
+        $name = $response->object()->name;
+        if(!$videoGame)
+        {
+            $videoGame = VideoGame::create([
+                'name' => $name,
+                'imgUrl' => $response->object()->background_image
+            ]);
+        }
+        
 
         $user = Auth::user();
 
+        $videoGames = $user->videoGames()->get();
+       // dd($videoGames);
+        foreach ($videoGames as $game) {
+            if($game["name"]==$name)
+            {
+                return Redirect::back();
+            }
+        }
         $user->videoGames()->save($videoGame);
 
         return Redirect::back();
