@@ -38,4 +38,22 @@ class Game extends Model
 
         return false;
     }
+
+    /**
+     * Cherche un jeu en fonction de son ID.
+     *
+     * @param int $gameId L'ID du jeu à supprimer.
+     * @return bool|null
+     */
+    public static function findGameById($gameId) : bool
+    {
+        // Utilise la méthode `find` pour récupérer le modèle du jeu en fonction de l'ID.
+        $game = self::find($gameId);
+
+        if ($game) {
+            // le jeu existe.
+            return true;
+        }
+        return false;
+    }
 }
